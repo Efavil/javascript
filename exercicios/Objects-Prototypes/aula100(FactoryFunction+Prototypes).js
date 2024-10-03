@@ -28,4 +28,4 @@ function criaPessoa(nome, sobrenome) {
 
 const p1 = criaPessoa('Luiz', 'Otávio');
 const p2 = criaPessoa('Maria', 'A.');
-console.log(p1);
+p1.falar();
