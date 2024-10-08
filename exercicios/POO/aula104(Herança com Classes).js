@@ -31,6 +31,24 @@ class Smartphone extends DispositivoEletronico {
     }
 }
 
+class Tablet extends DispositivoEletronico {
+    constructor(nome, temWifi) {
+        super(nome);
+        this.temWifi = temWifi;
+    }
+
+    ligar() {
+        console.log('Olha, você alterou o método ligar.')
+    }
+
+    falaOi() {
+        console.log('Oi, eu sou um tablet!')
+    }
+}
+
 const s1 = new Smartphone('iphone', 'Preto', '8');
-s1.ligar();
 console.log(s1);
+
+const t1 = new Tablet('iPad', true);
+t1.ligar();
+t1.falaOi();
