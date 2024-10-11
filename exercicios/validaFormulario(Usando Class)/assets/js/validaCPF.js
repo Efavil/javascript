@@ -38,5 +38,3 @@ class ValidaCPF {
             return novoCpf === CPFLimpo;
     }
 }
-
-console.log(ValidaCPF.ValidarCPF('070.987.720-13'));
