@@ -1,40 +1,45 @@
 class ValidaCPF {
-    static ValidarCPF(CPF) {
-           let CPFLimpo = CPF.replace(/\D+/g, '');
+    constructor(cpfEnviado) {
+        Object.defineProperty(this, 'cpfLimpo', {
+            writable: false,
+            enumerable: true,
+            configurable:false,
+            value: cpfEnviado.replace(/\D+/g, '')
+        });
+    }
 
-           const CPFparcial = CPFLimpo.slice(0, -2);
+    geraNovoCpf() {
+        const cpfSemDigitos = this.cpfLimpo.slice(0, -2);
+        const digito1 = ValidaCPF.geraDigito(cpfSemDigitos);
+        const digito2 = ValidaCPF.geraDigito(cpfSemDigitos + digito1);
+        this.novoCPF = cpfSemDigitos + digito1 + digito2;
 
-           function Valida() {
-            if(typeof CPFLimpo === 'undefined') return false;
-            if(CPFLimpo.length !== 11) return false;
+    }
 
-            function isSequencia() {
-                const sequencia =  CPFLimpo[0].repeat(CPFLimpo.lengt);
-                return sequencia === CPFLimpo;
-            }
+    static geraDigito(cpfSemDigitos) {
+        let total = 0;
+        let reverso = cpfSemDigitos.length + 1;
 
-            if(isSequencia()) return false;
-           };
+        for(let StringNumerica of cpfSemDigitos) {
+            total += reverso * Number(StringNumerica);
+            reverso --;
+        }
 
-           const digito1 = criaDigito(CPFparcial);
+        const digito = 11 - (total % 11);
+        return digito <= 9  ? String(digito) : '0';
+    }
 
-           function criaDigito(CPFparcial) {
-            const CPFArray = Array.from(CPFparcial);
+    eSequencia() {
+        return this.cpfLimpo.charAt(0).repeat(11) === this.cpfLimpo;
+    }
 
-            let regressivo = CPFArray.length + 1;
-            const total = CPFArray.reduce((ac, val) => {
-             ac += (regressivo * Number(val));
-            regressivo--;
-            return ac;
-                }, 0);
-
-            const digito = 11 - (total % 11);
-            return digito > 9 ? '0' : String(digito);
-           };
-
-           const digito2 = criaDigito(CPFparcial + digito1);
-
-           const novoCpf = CPFparcial + digito1 + digito2;
-            return novoCpf === CPFLimpo;
+    valida() {
+        if(!this.cpfLimpo) return false;
+        if(typeof this.cpfLimpo !== 'string') return false;
+        if(this.cpfLimpo.length !== 11) return false;
+        if(this.eSequencia()) return false;
+        this.geraNovoCpf();
+        
+        return this.novoCPF === this.cpfLimpo;
     }
 }

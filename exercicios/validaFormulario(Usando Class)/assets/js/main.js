@@ -14,6 +14,32 @@ class ValidaFormulario {
     handleSubmit(e) {
         e.preventDefault();
         const camposValidos = this.camposSaoValidos();
+        const senhasValidas = this.senhasSaoValidas();
+
+        if(camposValidos && senhasValidas) {
+            alert('Formulário enviado.');
+            this.formulario.submit();
+        }
+    }
+
+    senhasSaoValidas() {
+        let valid = true;
+
+        const senha = this.formulario.querySelector('.senha');
+        const repetirSenha = this.formulario.querySelector('.repetir-senha');
+
+        if(senha.value !== repetirSenha.value) {
+            valid = false;
+            this.criaErro(senha, 'Campos senha e repetir senha precisam ser iguais.');
+            this.criaErro(repetirSenha, 'Campos senha e repetir senha precisam ser iguais.');
+        }
+
+        if(senha.length < 6 || senha.length > 12) {
+            valid = false;
+            this.criaErro(senha, 'Senha precisa estar entre 6 e 12 caracteres.');
+        }
+
+        return valid;
     }
 
     camposSaoValidos() {
@@ -31,9 +57,42 @@ class ValidaFormulario {
             }
 
             if(campo.classList.contains('cpf')) {
-                
+                if(!this.ValidaCPF(campo)) valid = false;
             }
+
+            if(campo.classList.contains('usuario')) {
+                if(!this.ValidaUsuario(campo)) valid = false;
+            }
+
         }
+    }
+
+    ValidaUsuario(campo) {
+        const usuario = campo.value;
+        let valid = true;
+
+        if(usuario.length < 3 || usuario.length > 12) {
+            this.criaErro(campo, 'Usuário precisa ter entre 3 e 12 caracteres.');
+            valid = false;
+        }
+
+        if(!usuario.match(/^[a-zA-Z0-9]+$/g)) {
+            this.criaErro(campo, 'Nome de usuário precisa conter apenas letras e/ou números.');
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    ValidaCPF(campo) {
+        const cpf = new ValidaCPF(campo.value);
+
+        if(!cpf.valida()) {
+            this.criaErro(campo, 'CPF inválido.')
+            return false;
+        }
+
+        return true;
     }
 
     criaErro(campo, msg) {
