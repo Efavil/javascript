@@ -1,4 +1,2 @@
-// 1
-// 2
-// 3
-console.log('Ouuuu')
+import soma from './modulo1';
+console.log(soma(5, 40));
